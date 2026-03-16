@@ -1,16 +1,16 @@
 [build-system]
-requires = ["setuptools", "wheel", "Cython", "numpy"]
+requires = ["setuptools>=64", "wheel", "Cython>=3.1.4", "numpy>=2.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "parallel-sparse-tools"
-version = "0.2.3"
+version = "0.2.4"
 authors = [
     {name = "Phillip Weinberg", email = "weinbe58@gmail.com"},
 ]
 description = "My package description"
 readme = "README.md"
-requires-python = ">=3.9,<3.13"
+requires-python = ">=3.10,<3.15"
 license = {text = "BSD-3-Clause"}
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -21,6 +21,8 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
     "numpy>=2.0.0",
