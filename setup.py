@@ -8,16 +8,34 @@ import subprocess
 import numpy as np
 
 
+def _find_libomp():
+    """Find libomp include and lib dirs on macOS. Returns (include_dir, lib_dir) or raises."""
+    # Common locations: Homebrew on Apple Silicon, Homebrew on Intel, MacPorts, conda
+    candidates = [
+        "/opt/homebrew/opt/libomp",   # Homebrew on Apple Silicon
+        "/usr/local/opt/libomp",      # Homebrew on Intel
+        "/opt/local",                  # MacPorts
+        os.environ.get("LIBOMP_PREFIX", ""),  # user-specified override
+    ]
+    for prefix in candidates:
+        if prefix and os.path.isfile(os.path.join(prefix, "include", "omp.h")):
+            return os.path.join(prefix, "include"), os.path.join(prefix, "lib")
+
+    raise RuntimeError(
+        "\n\nCould not find libomp, which is required to build parallel-sparse-tools on macOS.\n"
+        "Install it with:  brew install libomp\n"
+        "Or set the LIBOMP_PREFIX environment variable to your libomp installation directory.\n"
+    )
+
+
 def extra_compile_args() -> List[str]:
     if sys.platform in ["win32", "cygwin", "win64"]:
         extra_compile_args = ["/openmp", "/std:c++17"]
-    if sys.platform in ["darwin"]:
+    elif sys.platform == "darwin":
+        include_dir, _ = _find_libomp()
         extra_compile_args = [
-            "-DLLVM_ENABLE_PROJECTS",
-            "-Xpreprocessor",
-            "-fopenmp-version=50",
-            "-fopenmp",
-            "--std=c++17",
+            "-Xpreprocessor", "-fopenmp", "--std=c++17",
+            f"-I{include_dir}",
         ]
     else:
         extra_compile_args = ["-fopenmp", "--std=c++17"]
@@ -40,13 +58,9 @@ def extra_compile_args() -> List[str]:
 def extra_link_args() -> List[str]:
     if sys.platform in ["win32", "cygwin", "win64"]:
         extra_link_args = ["/openmp"]
-    if sys.platform in ["darwin"]:
-        extra_link_args = [
-            "-DLLVM_ENABLE_PROJECTS",
-            "-Xpreprocessor",
-            "-fopenmp-version=50",
-            "-fopenmp",
-        ]
+    elif sys.platform == "darwin":
+        _, lib_dir = _find_libomp()
+        extra_link_args = ["-lomp", f"-L{lib_dir}"]
     else:
         extra_link_args = ["-fopenmp"]
 
