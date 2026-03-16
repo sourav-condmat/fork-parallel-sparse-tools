@@ -34,7 +34,7 @@ jobs:
         if: runner.os == 'macOS'
         run: brew install libomp
       - name: Install dependencies
-        run: pdm install
+        run: pdm install -G dev
       - name: Test with pytest & generate coverage
         run: |
-          pdm run pytest test
+          pdm test
