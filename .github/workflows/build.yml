@@ -21,7 +21,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python: [cp311, cp312, cp13, cp14]
+        python: [cp311, cp312, cp313, cp314]
 
     steps:
       - uses: actions/checkout@v4
