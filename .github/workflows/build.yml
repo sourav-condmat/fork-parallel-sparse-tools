@@ -29,9 +29,6 @@ jobs:
         uses: docker/setup-qemu-action@v3
         with:
           platforms: all
-      - name: Set macOS deployment target
-        if: runner.os == 'macOS'
-        run: echo "MACOSX_DEPLOYMENT_TARGET=${{ matrix.os == 'macos-14' && '14.0' || '13.0' }}" >> $GITHUB_ENV
       - name: Build wheels
         uses: pypa/cibuildwheel@v3.1.2
         env:
