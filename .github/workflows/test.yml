@@ -16,8 +16,13 @@ jobs:
   test:
     strategy:
       matrix:
+        include:
+          - os: macos-13
+            macos_target: "13.0"
+          - os: macos-14
+            macos_target: "14.0"
+        os: [ubuntu-latest, windows-latest]
         python-version: ["3.11", "3.12", "3.13", "3.14"]
-        os: [ubuntu-latest, windows-latest, macos-13, macos-14]
     runs-on: ${{ matrix.os }}
 
     steps:
