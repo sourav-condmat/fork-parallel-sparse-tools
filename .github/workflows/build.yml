@@ -20,9 +20,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-13, macos-14]
+        include:
+        - os: macos-13
+          macos_target: "13.0"
+        - os: macos-14
+          macos_target: "14.0"
+        os: [ubuntu-latest, windows-latest]
         python: [cp311, cp312, cp313, cp314]
-
     steps:
       - uses: actions/checkout@v4
       - name: Set up QEMU
@@ -34,7 +38,7 @@ jobs:
         uses: pypa/cibuildwheel@v3.1.2
         env:
           CIBW_BUILD: ${{ matrix.python }}-*
-          MACOSX_DEPLOYMENT_TARGET: ${{ matrix.os == 'macos-14' && '14.0' || '13.0' }}
+          MACOSX_DEPLOYMENT_TARGET: ${{ matrix.macos_target }}
       - uses: actions/upload-artifact@v4
         with:
           name: cibw-wheels-${{ matrix.os }}-${{ matrix.python }}
