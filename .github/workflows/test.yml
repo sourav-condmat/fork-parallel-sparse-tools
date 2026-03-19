@@ -30,9 +30,6 @@ jobs:
         name: Setup PDM
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install libomp (macOS)
-        if: runner.os == 'macOS'
-        run: brew install libomp
       - name: Install dependencies
         run: pdm install -G dev
       - name: Test with pytest & generate coverage
