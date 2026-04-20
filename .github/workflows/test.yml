@@ -27,9 +27,11 @@ jobs:
       - name: Install libomp on macOS
         if: runner.os == 'macOS'
         run: brew install libomp
-      - name: Install SLEPC
-        run: |
-          pdm run install-slepc
+      - name: Install PETSc and SLEPc
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        env:
+          PETSC_CONFIGURE_OPTIONS: "--with-mpi=0 --download-openblas"
+        run: pip install petsc petsc4py slepc slepc4py
       - name: Install dependencies
         run: pdm install -G dev
       - name: Test with pytest & generate coverage
