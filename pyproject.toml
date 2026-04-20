@@ -49,7 +49,7 @@ upload = "python -m twine upload -r bloqade dist/*"
 build = {cmd = "pdm build"}
 publish = {composite = ["build", "upload"]}
 test = {shell = "pytest -x"}
-install-slepc = {shell = "PETSC_CONFIGURE_OPTIONS='--with-mpi=0 --download-openblas' pip install petsc petsc4py slepc slepc4py"}
+install-slepc = {shell = "PETSC_CONFIGURE_OPTIONS='--with-mpi=0 --download-f2cblaslapack' pip install petsc petsc4py slepc slepc4py"}
 
 
 
@@ -63,7 +63,7 @@ dependency-versions = "pinned"
 environment-pass = []
 build-verbosity = 1
 
-before-all = "PETSC_CONFIGURE_OPTIONS='--with-mpi=0 --download-openblas' pip install petsc petsc4py slepc slepc4py"
+before-all = "PETSC_CONFIGURE_OPTIONS='--with-mpi=0 --download-f2cblaslapack' pip install petsc petsc4py slepc slepc4py"
 
 before-build = ""
 repair-wheel-command = ""
