@@ -5,9 +5,10 @@ pytestmark = pytest.mark.skipif(
     sys.platform == "win32",
     reason="SLEPc not supported on Windows"
 )
+if sys.platform != "win32":
+    from petsc4py import PETSc
+    from slepc4py import SLEPc
 
-from petsc4py import PETSc
-from slepc4py import SLEPc
 
 def test_slepc_eigenvalues():
     # Create a simple 2x2 matrix

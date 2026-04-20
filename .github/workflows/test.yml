@@ -40,5 +40,5 @@ jobs:
         if: runner.os == 'Linux' || runner.os == 'macOS'
         run: pdm install -G dev
       - name: Test with pytest & generate coverage
-        run: |
+        run: 
           pdm test
