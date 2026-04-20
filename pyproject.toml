@@ -31,7 +31,8 @@ dependencies = [
 [tool.pdm.dev-dependencies]
 dev = [
     "pytest>=8.3.1",
-    "mpi4py",
+]
+slepc = [
     "petsc4py",
     "slepc4py"
 ]
@@ -63,7 +64,6 @@ dependency-versions = "pinned"
 environment-pass = []
 build-verbosity = 1
 
-before-all = "PETSC_CONFIGURE_OPTIONS='--with-mpi=0 --download-f2cblaslapack' pip install petsc petsc4py slepc slepc4py"
 
 before-build = ""
 repair-wheel-command = ""
@@ -93,10 +93,12 @@ musllinux-s390x-image = "musllinux_1_2"
 
 
 [tool.cibuildwheel.linux]
+before-all = "PETSC_CONFIGURE_OPTIONS='--with-mpi=0 --download-f2cblaslapack' pip install petsc petsc4py slepc slepc4py"
 archs = ["native"]
 repair-wheel-command = "auditwheel repair -w {dest_dir} {wheel}"
 
 [tool.cibuildwheel.macos]
+before-all = "PETSC_CONFIGURE_OPTIONS='--with-mpi=0 --download-f2cblaslapack' pip install petsc petsc4py slepc slepc4py"
 archs = ["native"]
 repair-wheel-command = "delocate-wheel --exclude libomp --require-archs {delocate_archs} -w {dest_dir} -v {wheel}"
 

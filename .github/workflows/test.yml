@@ -24,6 +24,10 @@ jobs:
         name: Setup PDM
         with:
           python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies (Windows)
+        if: runner.os == 'windows'
+        run: pdm install -G dev -without slepc
       - name: Install libomp on macOS
         if: runner.os == 'macOS'
         run: brew install libomp
@@ -32,7 +36,7 @@ jobs:
         env:
           PETSC_CONFIGURE_OPTIONS: "--with-mpi=0 --download-f2cblaslapack"
         run: pip install petsc petsc4py slepc slepc4py
-      - name: Install dependencies
+      - name: Install dependencies (Linux and Mac)
         run: pdm install -G dev
       - name: Test with pytest & generate coverage
         run: |
