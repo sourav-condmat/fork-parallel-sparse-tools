@@ -39,7 +39,7 @@ jobs:
         run: |
           pip install petsc petsc4py
           export PETSC_DIR=$(python -c "import petsc; print(petsc.get_petsc_dir())")
-          export PETSC_ARCH=$(python -c "import petsc; print(petsc.get_petsc_arch())")
+          export SLEPC_CONFIGURE_OPTIONS="--with-petsc-dir=$PETSC_DIR"
           pip install slepc slepc4py
       - name: Install dependencies (Linux and Mac)
         if: runner.os == 'Linux' || runner.os == 'macOS'

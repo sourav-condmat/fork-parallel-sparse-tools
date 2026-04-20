@@ -53,7 +53,7 @@ test = {shell = "pytest -x"}
 install-slepc = {shell = """
 PETSC_CONFIGURE_OPTIONS='--with-mpi=0 --download-f2cblaslapack' pip install petsc petsc4py && \
 export PETSC_DIR=$(python -c 'import petsc; print(petsc.get_petsc_dir())') && \
-export PETSC_ARCH=$(python -c 'import petsc; print(petsc.get_petsc_arch())') && \
+export SLEPC_CONFIGURE_OPTIONS="--with-petsc-dir=$PETSC_DIR" && \
 pip install slepc slepc4py
 """}
 
