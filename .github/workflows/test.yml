@@ -27,7 +27,7 @@ jobs:
 
       - name: Install dependencies (Windows)
         if: runner.os == 'windows'
-        run: pdm install -G dev -without slepc
+        run: pdm install -G dev --without slepc
       - name: Install libomp on macOS
         if: runner.os == 'macOS'
         run: brew install libomp
