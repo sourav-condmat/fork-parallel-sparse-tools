@@ -32,13 +32,15 @@ jobs:
       - name: Install libomp on macOS
         if: runner.os == 'macOS'
         run: brew install libomp
-      - name: Install PETSc and SLEPc
+      - name: Install PETSc and SLEPc (Linux and macOS)
         if: runner.os == 'Linux' || runner.os == 'macOS'
         env:
           PETSC_CONFIGURE_OPTIONS: "--with-mpi=0 --download-f2cblaslapack"
-        run: 
-            pip install petsc petsc4py 
-            pip install slepc slepc4py --no-build-isolation
+        run: |
+          pip install petsc petsc4py
+          export PETSC_DIR=$(python -c "import petsc; print(petsc.get_petsc_dir())")
+          export PETSC_ARCH=$(python -c "import petsc; print(petsc.get_petsc_arch())")
+          pip install slepc slepc4py
       - name: Install dependencies (Linux and Mac)
         if: runner.os == 'Linux' || runner.os == 'macOS'
         run: pdm install -G dev
