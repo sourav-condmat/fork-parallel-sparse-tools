@@ -35,7 +35,7 @@ jobs:
         if: runner.os == 'Linux' || runner.os == 'macOS'
         env:
           PETSC_CONFIGURE_OPTIONS: "--with-mpi=0 --download-f2cblaslapack"
-        run: pip install petsc petsc4py slepc slepc4py
+        run: pip install petsc petsc4py slepc slepc4py --no-build-isolation
       - name: Install dependencies (Linux and Mac)
         if: runner.os == 'Linux' || runner.os == 'macOS'
         run: pdm install -G dev
