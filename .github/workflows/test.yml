@@ -9,6 +9,7 @@ concurrency:
 jobs:
   test:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-15-intel, macos-15]
         python-version: ["3.11", "3.12", "3.13", "3.14"]
@@ -35,7 +36,9 @@ jobs:
         if: runner.os == 'Linux' || runner.os == 'macOS'
         env:
           PETSC_CONFIGURE_OPTIONS: "--with-mpi=0 --download-f2cblaslapack"
-        run: pip install petsc petsc4py slepc slepc4py --no-build-isolation
+        run: 
+            pip install petsc petsc4py 
+            pip install slepc slepc4py --no-build-isolation
       - name: Install dependencies (Linux and Mac)
         if: runner.os == 'Linux' || runner.os == 'macOS'
         run: pdm install -G dev
