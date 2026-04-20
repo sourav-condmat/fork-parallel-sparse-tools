@@ -49,7 +49,7 @@ upload = "python -m twine upload -r bloqade dist/*"
 build = {cmd = "pdm build"}
 publish = {composite = ["build", "upload"]}
 test = {shell = "pytest -x"}
-install-slepc = {shell = "PETSC_CONFIGURE_OPTIONS='--download-mumps --download-scalapack' pip install petsc petsc4py slepc slepc4py"}
+install-slepc = {shell =  pip install petsc petsc4py slepc slepc4py"}
 
 
 
@@ -63,7 +63,7 @@ dependency-versions = "pinned"
 environment-pass = []
 build-verbosity = 1
 
-before-all = "pip install mpi4py && PETSC_CONFIGURE_OPTIONS='--download-mumps --download-scalapack' pip install petsc petsc4py slepc slepc4py"
+before-all = "pip install petsc petsc4py slepc slepc4py"
 
 before-build = ""
 repair-wheel-command = ""

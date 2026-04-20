@@ -28,8 +28,6 @@ jobs:
         if: runner.os == 'macOS'
         run: brew install libomp
       - name: Install PETSC
-        env:
-          PETSC_CONFIGURE_OPTIONS: "--download-mumps --download-scalapack"
         run: |
           pip install petsc petsc4py
       - name: Install SLEPC
