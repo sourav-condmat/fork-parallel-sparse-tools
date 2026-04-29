@@ -25,7 +25,8 @@ jobs:
         name: Setup PDM
         with:
           python-version: ${{ matrix.python-version }}
-          venv: false
+          enable-pep582: false
+
 
 
       - name: Configure PDM
