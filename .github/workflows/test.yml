@@ -37,8 +37,6 @@ jobs:
         env:
           PETSC_CONFIGURE_OPTIONS: >
             --download-openblas
-            --download-mumps
-            --download-scalapack
             --with-debugging=0
         run: |
           pip install petsc petsc4py
