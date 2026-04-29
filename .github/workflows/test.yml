@@ -38,7 +38,10 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y gfortran libopenblas-dev mpi-default-dev mpi-default-bin
           pip install --upgrade pip numpy cython
-          pip install --no-build-isolation petsc petsc4py slepc slepc4py
+          pip install petsc petsc4py
+          echo "PETSC_DIR=$(python -c 'import petsc; print(petsc.get_petsc_dir())')" >> $GITHUB_ENV
+          echo "PETSC_ARCH=" >> $GITHUB_ENV 
+          pip install slepc slepc4py
 
       - name: Install dependencies (Linux and Mac)
         if: runner.os == 'Linux' || runner.os == 'macOS'
