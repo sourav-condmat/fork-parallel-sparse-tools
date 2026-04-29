@@ -33,11 +33,18 @@ jobs:
         if: runner.os == 'macOS'
         run: brew install libomp
       - name: Install PETSc and SLEPc (Linux and macOS)
-        if: runner.os == 'Linux' || runner.os == 'macOS'
-        env:
-          PETSC_CONFIGURE_OPTIONS: "--with-mpi=0 --download-f2cblaslapack"
-        run: 
-          pip install petsc petsc4py slepc 
+        if: runner.os == 'Linux' 
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y gfortran libopenblas-dev mpi-default-dev mpi-default-bin
+          pip install --upgrade pip numpy cython
+          pip install petsc==3.20.* petsc4py==3.20.*
+          echo "PETSC_DIR=$(python -c 'import petsc; print(petsc.get_petsc_dir())')" >> $GITHUB_ENV
+          echo "PETSC_ARCH=" >> $GITHUB_ENV
+          pip install slepc==3.20.*
+          echo "SLEPC_DIR=$(python -c 'import slepc; print(slepc.get_slepc_dir())')" >> $GITHUB_ENV
+          pip install slepc4py==3.20.*
+          
       - name: Install dependencies (Linux and Mac)
         if: runner.os == 'Linux' || runner.os == 'macOS'
         run: pdm install -G dev
