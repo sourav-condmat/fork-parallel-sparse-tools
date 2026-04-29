@@ -45,11 +45,12 @@ jobs:
             --with-debugging=0
         run: |
           pdm run pip install petsc petsc4py
-          echo "PETSC_DIR=$(pdm run python -c 'import petsc; print(petsc.get_petsc_dir())')" >> $GITHUB_ENV
+          export PETSC_DIR=$(pdm run python -c 'import petsc; print(petsc.get_petsc_dir())')
+          export PETSC_ARCH=""
+          echo "PETSC_DIR=$PETSC_DIR" >> $GITHUB_ENV
           echo "PETSC_ARCH=" >> $GITHUB_ENV
           pdm run pip install slepc slepc4py
           echo "SLEPC_DIR=$(pdm run python -c 'import slepc; print(slepc.get_slepc_dir())')" >> $GITHUB_ENV
-
       - name: Test with pytest & generate coverage
         run: 
           pdm test
