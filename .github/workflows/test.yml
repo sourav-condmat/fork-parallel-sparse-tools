@@ -25,12 +25,7 @@ jobs:
         name: Setup PDM
         with:
           python-version: ${{ matrix.python-version }}
-          enable-pep582: false
 
-
-
-      - name: Configure PDM
-        run: pdm config python.use_venv false
 
       - name: Install dependencies (Windows)
         if: runner.os == 'windows'
@@ -45,18 +40,11 @@ jobs:
 
       - name: Install PETSc and SLEPc (Linux and macOS)
         if: runner.os == 'Linux' || runner.os == 'macOS'
-        env:
-          PETSC_CONFIGURE_OPTIONS: >
-            --download-f2cblaslapack
-            --with-debugging=0
         run: |
-          pip install petsc petsc4py
-          export PETSC_DIR=$(python -c 'import petsc; print(petsc.get_petsc_dir())')
-          export PETSC_ARCH=""
-          echo "PETSC_DIR=$PETSC_DIR" >> $GITHUB_ENV
+          pdm run install-slepc
+          echo "PETSC_DIR=$(pdm run python -c 'import petsc; print(petsc.get_petsc_dir())')" >> $GITHUB_ENV
           echo "PETSC_ARCH=" >> $GITHUB_ENV
-          pip install slepc slepc4py
-          echo "SLEPC_DIR=$(python -c 'import slepc; print(slepc.get_slepc_dir())')" >> $GITHUB_ENV
+          echo "SLEPC_DIR=$(pdm run python -c 'import slepc; print(slepc.get_slepc_dir())')" >> $GITHUB_ENV
       - name: Test with pytest & generate coverage
         run: 
           pdm test
