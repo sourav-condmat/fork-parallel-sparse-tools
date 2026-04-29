@@ -37,9 +37,9 @@ jobs:
 
       - name: Install PETSc and SLEPc (Linux and macOS)
         if: runner.os == 'Linux' || runner.os == 'macOS'
-        run: 
-            pdm run python -m ensurepip --upgrade
-            pdm run install-slepc
+        run:  | 
+              pdm run python -m ensurepip --upgrade
+              pdm run install-slepc
 
       - name: Install dependencies (Linux and Mac)
         if: runner.os == 'Linux' || runner.os == 'macOS'
