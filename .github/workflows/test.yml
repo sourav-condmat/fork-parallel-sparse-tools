@@ -26,6 +26,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Configure PDM
+        run: pdm config python.use_venv false
+
       - name: Install dependencies (Windows)
         if: runner.os == 'windows'
         run: pdm install -G dev --without slepc
@@ -44,13 +47,13 @@ jobs:
             --download-f2cblaslapack
             --with-debugging=0
         run: |
-          pdm run pip install petsc petsc4py
-          export PETSC_DIR=$(pdm run python -c 'import petsc; print(petsc.get_petsc_dir())')
+          pip install petsc petsc4py
+          export PETSC_DIR=$(python -c 'import petsc; print(petsc.get_petsc_dir())')
           export PETSC_ARCH=""
           echo "PETSC_DIR=$PETSC_DIR" >> $GITHUB_ENV
           echo "PETSC_ARCH=" >> $GITHUB_ENV
-          pdm run pip install slepc slepc4py
-          echo "SLEPC_DIR=$(pdm run python -c 'import slepc; print(slepc.get_slepc_dir())')" >> $GITHUB_ENV
+          pip install slepc slepc4py
+          echo "SLEPC_DIR=$(python -c 'import slepc; print(slepc.get_slepc_dir())')" >> $GITHUB_ENV
       - name: Test with pytest & generate coverage
         run: 
           pdm test
