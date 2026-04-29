@@ -14,23 +14,17 @@ def main():
 
     import petsc
     petsc_dir = petsc.get_petsc_dir()
-    os.environ["PETSC_DIR"] = petsc_dir
-    os.environ["PETSC_ARCH"] = ""
     print(f"PETSC_DIR={petsc_dir}")
 
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "slepc"])
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "slepc", "slepc4py"], env={
+        **os.environ,
+        "PETSC_DIR": petsc_dir,
+        "PETSC_ARCH": "",
+    })
 
     import slepc
     slepc_dir = slepc.get_slepc_dir()
-    os.environ["SLEPC_DIR"] = slepc_dir
     print(f"SLEPC_DIR={slepc_dir}")
-
-    # slepc4py needs --no-build-isolation so its backend dependency
-    # resolution inherits PETSC_DIR and SLEPC_DIR from this process
-    subprocess.check_call([
-        sys.executable, "-m", "pip", "install",
-        "--no-build-isolation", "slepc4py"
-    ])
 
     github_env = os.environ.get("GITHUB_ENV")
     if github_env:
