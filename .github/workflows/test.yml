@@ -40,11 +40,8 @@ jobs:
 
       - name: Install PETSc and SLEPc (Linux and macOS)
         if: runner.os == 'Linux' || runner.os == 'macOS'
-        run: |
-          pdm run install-slepc
-          echo "PETSC_DIR=$(pdm run python -c 'import petsc; print(petsc.get_petsc_dir())')" >> $GITHUB_ENV
-          echo "PETSC_ARCH=" >> $GITHUB_ENV
-          echo "SLEPC_DIR=$(pdm run python -c 'import slepc; print(slepc.get_slepc_dir())')" >> $GITHUB_ENV
+        run: pdm run install-petsc
+
       - name: Test with pytest & generate coverage
         run: 
           pdm test

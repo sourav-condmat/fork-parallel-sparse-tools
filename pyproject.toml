@@ -50,12 +50,7 @@ upload = "python -m twine upload -r bloqade dist/*"
 build = {cmd = "pdm build"}
 publish = {composite = ["build", "upload"]}
 test = {shell = "pytest -x"}
-install-slepc = {shell = """
-    pip install petsc petsc4py
-    export PETSC_DIR=$(python -c 'import petsc; print(petsc.get_petsc_dir())')
-    export PETSC_ARCH=""
-    pip install slepc slepc4py
-""", env = {PETSC_CONFIGURE_OPTIONS = "--download-f2cblaslapack --with-debugging=0"}}
+install-slepc = {call = "slepc_install.install_slepc:main", env = {PETSC_CONFIGURE_OPTIONS = "--download-f2cblaslapack --with-debugging=0"}}
 [tool.cibuildwheel]
 skip = ""
 
