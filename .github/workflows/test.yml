@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest] #, windows-latest, macos-15-intel, macos-15]
+        os: [ubuntu-latest, windows-latest, macos-15-intel, macos-15]
         python-version: ["3.11", "3.12", "3.13", "3.14"]
     runs-on: ${{ matrix.os }}
 
@@ -32,6 +32,11 @@ jobs:
       - name: Install libomp on macOS
         if: runner.os == 'macOS'
         run: brew install libomp
+
+      - name: Install dependencies (Linux and Mac)
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        run: pdm install -G dev
+
       - name: Install PETSc and SLEPc (Linux and macOS)
         if: runner.os == 'Linux' || runner.os == 'macOS'
         env:
@@ -39,15 +44,12 @@ jobs:
             --download-openblas
             --with-debugging=0
         run: |
-          pip install petsc petsc4py
-          echo "PETSC_DIR=$(python -c 'import petsc; print(petsc.get_petsc_dir())')" >> $GITHUB_ENV
-          echo "PETSC_ARCH=" >> $GITHUB_ENV 
-          pip install slepc slepc4py
+          pdm run pip install petsc petsc4py
+          echo "PETSC_DIR=$(pdm run python -c 'import petsc; print(petsc.get_petsc_dir())')" >> $GITHUB_ENV
+          echo "PETSC_ARCH=" >> $GITHUB_ENV
+          pdm run pip install slepc slepc4py
+          echo "SLEPC_DIR=$(pdm run python -c 'import slepc; print(slepc.get_slepc_dir())')" >> $GITHUB_ENV
 
-      - name: Install dependencies (Linux and Mac)
-        if: runner.os == 'Linux' || runner.os == 'macOS'
-        run: pdm install -G dev
       - name: Test with pytest & generate coverage
         run: 
-          echo "PETSC_DIR=$PETSC_DIR"
           pdm test
