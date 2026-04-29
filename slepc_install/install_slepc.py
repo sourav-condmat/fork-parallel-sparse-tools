@@ -10,26 +10,28 @@ def main():
     )
     os.environ["PETSC_CONFIGURE_OPTIONS"] = configure_options
 
-    # Install PETSc
     subprocess.check_call([sys.executable, "-m", "pip", "install", "petsc", "petsc4py"])
 
-    # Import and set PETSC_DIR in current process so subprocesses inherit it
     import petsc
     petsc_dir = petsc.get_petsc_dir()
     os.environ["PETSC_DIR"] = petsc_dir
     os.environ["PETSC_ARCH"] = ""
     print(f"PETSC_DIR={petsc_dir}")
 
-    # Install SLEPc — inherits PETSC_DIR from os.environ above
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "slepc", "slepc4py"])
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "slepc"])
 
-    # Import and set SLEPC_DIR
     import slepc
     slepc_dir = slepc.get_slepc_dir()
     os.environ["SLEPC_DIR"] = slepc_dir
     print(f"SLEPC_DIR={slepc_dir}")
 
-    # Write to GITHUB_ENV if running in CI
+    # slepc4py needs --no-build-isolation so its backend dependency
+    # resolution inherits PETSC_DIR and SLEPC_DIR from this process
+    subprocess.check_call([
+        sys.executable, "-m", "pip", "install",
+        "--no-build-isolation", "slepc4py"
+    ])
+
     github_env = os.environ.get("GITHUB_ENV")
     if github_env:
         with open(github_env, "a") as f:
