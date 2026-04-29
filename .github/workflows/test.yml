@@ -40,7 +40,7 @@ jobs:
 
       - name: Install PETSc and SLEPc (Linux and macOS)
         if: runner.os == 'Linux' || runner.os == 'macOS'
-        run: pdm run install-petsc
+        run: pdm run install-slepc
 
       - name: Test with pytest & generate coverage
         run: 
