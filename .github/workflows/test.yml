@@ -41,7 +41,7 @@ jobs:
         if: runner.os == 'Linux' || runner.os == 'macOS'
         env:
           PETSC_CONFIGURE_OPTIONS: >
-            --download-openblas
+            --download-f2cblaslapack
             --with-debugging=0
         run: |
           pdm run pip install petsc petsc4py
