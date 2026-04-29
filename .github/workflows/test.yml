@@ -34,13 +34,16 @@ jobs:
         if: runner.os == 'macOS'
         run: brew install libomp
 
-      - name: Install dependencies (Linux and Mac)
-        if: runner.os == 'Linux' || runner.os == 'macOS'
-        run: pdm install -G dev
 
       - name: Install PETSc and SLEPc (Linux and macOS)
         if: runner.os == 'Linux' || runner.os == 'macOS'
-        run: pdm run install-slepc
+        run: 
+            pdm run python -m ensurepip --upgrade
+            pdm run install-slepc
+
+      - name: Install dependencies (Linux and Mac)
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        run: pdm install -G dev
 
       - name: Test with pytest & generate coverage
         run: 
